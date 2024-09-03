@@ -8,17 +8,6 @@ enum Cell{
     Alive
 }
 
-impl Cell{
-    // Gets alive neighbors of the cell (it's a number between 0 and 8)
-    fn get_alive_neighbors(&self) -> u8 {
-        todo!();
-    }
-
-    fn next_state(&self) -> Self{
-        todo!("")
-    }
-}
-
 #[derive(Debug)]
 struct Grid{
     cells: Vec<Vec<Cell>>,
