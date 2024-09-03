@@ -2,7 +2,7 @@
 
 use macroquad::prelude::*;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 enum Cell{
     Dead,
     Alive
@@ -48,8 +48,30 @@ impl Grid{
         Self::default()
     }
 
-    fn neighbors(x: u64, y: u64) -> Vec<Cell> {
-        todo!();
+    // Gets neighbors of a given position and counts how many of them are alive cells.
+    fn neighbors_alive(&self, x: usize, y: usize) -> u8 {
+        let mut count = 0;
+
+        let neighbors = self.get_neighbors(x, y);
+
+        for neighbor in neighbors{
+            if self.cell_alive(neighbor.0, neighbor.1) {
+                count += 1;
+            }
+        }
+        
+        count
+    }
+
+    fn get_neighbors(&self, x:usize, y:usize) -> Vec<(usize, usize)>{
+        // Need to handle the case in which the position may not have some neighbors
+        vec![(x-1,y-1), (x-1, y), (x-1, y+1), 
+            (x, y-1), (x, y+1), 
+            (x+1, y-1), (x+1, y), (x+1, y+1)]
+    }
+
+    fn cell_alive(&self, x: usize, y: usize) -> bool {
+        self.cells[x][y] == Cell::Alive
     }
 
 
@@ -67,6 +89,8 @@ async fn main() {
         
 
         println!("{:?}", grid);
+        // let a = grid.neighbors_alive(2, 2);
+        // println!("{}",a);
         break;
 
         // 
