@@ -22,11 +22,11 @@ async fn main() {
         clear_background(BLACK);
 
         // Cell: Enum?
-        //  Attributes: Position on a grid, a state (dead or alive)
         //  Methods: next_state (calculates how many neighbors alive and decides whether or not it lives or dies)
 
-        // Grid
-        //  
+        // Grid: 100x100 grid? From [0][0] to [99][99]
+        //  It has cells in it, on each space available there is a cell
+        //  You can ask to it for the neighbors of a cell and it will return 8 cells (?)
 
         next_frame().await
     }
