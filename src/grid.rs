@@ -146,6 +146,14 @@ mod tests {
     }
 
     #[test]
+    fn test_count_alive_neighbors_edge_case() {
+        let grid = create_preloaded_grid();
+
+        let alive_neighbors = grid.count_alive_neighbors(0, 0);
+        assert_eq!(alive_neighbors, 3);
+    }
+
+    #[test]
     fn test_get_neighbors() {
         let grid = Grid::new(4, 4);
         let neighbors = grid.get_neighbors(1, 1);
@@ -157,15 +165,6 @@ mod tests {
             (2, 0), (2, 1), (2, 2),
         ]);
     }
-
-    #[test]
-    fn test_count_alive_neighbors_edge_case() {
-        let grid = create_preloaded_grid();
-
-        let alive_neighbors = grid.count_alive_neighbors(0, 0);
-        assert_eq!(alive_neighbors, 3);
-    }
-
 
     // This tests if the next 2 generations are calculated correctly
     #[test]
@@ -203,8 +202,6 @@ mod tests {
         let grid1 = Grid::new_random(16, 16);
         let grid2 = Grid::new_random(16, 16);
 
-        println!("{:?}", grid1);
-        println!("{:?}", grid2);
         assert_ne!(grid1.cells, grid2.cells);
     }
 }
