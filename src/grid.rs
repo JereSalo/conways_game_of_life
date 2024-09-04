@@ -93,7 +93,7 @@ impl Grid {
     }
 
     // Calculates next generation and updates the grid with that result.
-    pub fn update(&mut self) -> () {
+    pub fn update(&mut self) {
         self.cells = self.calculate_next_gen();
     }
 
