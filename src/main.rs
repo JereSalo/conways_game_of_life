@@ -6,31 +6,35 @@ enum Cell{
     Alive
 }
 
-// In Grid I store cols and rows just for easiness, I could obtain them right from cells.
 #[derive(Debug)]
 struct Grid{
-    cells: Vec<Vec<Cell>>,
-    rows: usize,
-    cols: usize,
+    cells: Vec<Vec<Cell>>
 }
 
 impl Grid{
+    fn rows(&self) -> usize {
+        self.cells.len()
+    }
+
+    fn cols(&self) -> usize {
+        self.cells[0].len()
+    }
+
     // New grid with dead cells
     fn new(rows: usize, cols: usize) -> Self {
         Grid { 
-            cells: vec![vec![Cell::Dead; cols]; rows], 
-            rows, cols
+            cells: vec![vec![Cell::Dead; cols]; rows],
         }
     }
 
-    // Example grid for testing
+    // Example grid for testing. Tests will break if changed.
     fn new_preloaded() -> Self{
         Grid { cells: vec![
             vec![Cell::Dead, Cell::Alive, Cell::Dead, Cell::Dead],
             vec![Cell::Alive, Cell::Alive, Cell::Dead, Cell::Dead],
             vec![Cell::Dead, Cell::Dead, Cell::Alive, Cell::Dead],
             vec![Cell::Dead, Cell::Dead, Cell::Dead, Cell::Alive],
-        ], rows: 4, cols:4 }
+        ] }
     }
 
     // Gets neighbors of a given position and counts how many of them are alive cells.
@@ -61,12 +65,13 @@ impl Grid{
         ];
 
         for (dx, dy) in &deltas {
+            // I use isize because result can be negative.
             let new_x = x as isize + dx;
             let new_y = y as isize + dy;
 
-            // Check if the new position is a valid one
-            if new_x >= 0 && new_x < self.rows as isize && 
-                new_y >= 0 && new_y < self.cols as isize {
+            // Only push neighbor to neighbors if it's position is valid
+            if new_x >= 0 && new_x < self.rows() as isize && 
+                new_y >= 0 && new_y < self.cols() as isize {
                 neighbors.push((new_x as usize, new_y as usize));
             }
         }
@@ -81,19 +86,16 @@ impl Grid{
 
     // For each cell in the grid calculates if in the next gen is going to be alive or not. Returns the next generation.
     fn calculate_next_gen(&self) -> Vec<Vec<Cell>> {
-        let mut next_gen: Vec<Vec<Cell>> = vec![vec![Cell::Dead; self.cols]; self.rows];
+        let mut next_gen: Vec<Vec<Cell>> = vec![vec![Cell::Dead; self.cols()]; self.rows()];
 
-        for i in 0..self.rows{
-            for j in 0..self.cols{
+        for i in 0..self.rows(){
+            for j in 0..self.cols(){
                 let current_gen_cell = self.cells[i][j];
                 let alive_neighbors = self.count_alive_neighbors(i, j);
-                let next_gen_cell = match current_gen_cell{
-                    Cell::Dead => 
-                        if alive_neighbors == 3 { Cell::Alive } 
-                            else {Cell::Dead},
-                    Cell::Alive => 
-                        if alive_neighbors == 2 || alive_neighbors == 3 {Cell::Alive} 
-                            else {Cell::Dead},
+                let next_gen_cell = match current_gen_cell {
+                    Cell::Alive if alive_neighbors == 2 || alive_neighbors == 3 => Cell::Alive,
+                    Cell::Dead if alive_neighbors == 3 => Cell::Alive,
+                    _ => Cell::Dead,
                 };
                 next_gen[i][j] = next_gen_cell;
             }
@@ -125,8 +127,8 @@ mod tests {
     #[test]
     fn test_grid_initialization() {
         let grid = Grid::new(4, 4);
-        for row in &grid.cells {
-            for &cell in row {
+        for row in grid.cells {
+            for cell in row {
                 assert_eq!(cell, Cell::Dead);
             }
         }
@@ -171,7 +173,7 @@ mod tests {
     }
 
 
-    // This tests if the next 
+    // This tests if the next 2 generations are calculated correctly
     #[test]
     fn test_next_generations() {
         let mut grid = Grid::new_preloaded();
