@@ -84,7 +84,7 @@ impl Grid{
         self.cells[x][y] == Cell::Alive
     }
 
-    fn update(&mut self){
+    fn update(&mut self) -> (){
         self.cells = self.calculate_next_gen();
     }
 
@@ -200,5 +200,34 @@ mod tests {
         assert_eq!(alive_neighbors, 3);
     }
 
-    // I need to add tests for calculate_next_gen and things like that
+
+    // This tests if the next 
+    #[test]
+    fn test_next_generations() {
+        let mut grid = Grid::new_preloaded();
+
+        grid.update();
+        let second_gen = grid.cells.clone();
+
+        grid.update();
+        let third_gen = grid.cells.clone();
+
+        let expected_second_gen = vec![
+            vec![Cell::Alive, Cell::Alive, Cell::Dead, Cell::Dead],
+            vec![Cell::Alive, Cell::Alive, Cell::Alive, Cell::Dead],
+            vec![Cell::Dead, Cell::Alive, Cell::Alive, Cell::Dead],
+            vec![Cell::Dead, Cell::Dead, Cell::Dead, Cell::Dead],
+        ];
+
+        let expected_third_gen = vec![
+            vec![Cell::Alive, Cell::Dead, Cell::Alive, Cell::Dead],
+            vec![Cell::Dead, Cell::Dead, Cell::Dead, Cell::Dead],
+            vec![Cell::Alive, Cell::Dead, Cell::Alive, Cell::Dead],
+            vec![Cell::Dead, Cell::Dead, Cell::Dead, Cell::Dead],
+        ];
+
+        assert_eq!(*second_gen, expected_second_gen);
+
+        assert_eq!(*third_gen, expected_third_gen);
+    }
 }
