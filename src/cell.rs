@@ -1,6 +1,6 @@
 #[derive(Debug, Clone, Copy, PartialEq)]
 
-pub enum Cell{
+pub enum Cell {
     Dead,
-    Alive
+    Alive,
 }

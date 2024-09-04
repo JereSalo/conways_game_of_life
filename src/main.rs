@@ -1,7 +1,7 @@
 use macroquad::prelude::*;
 
-use conways::grid::Grid;
 use conways::cell::Cell;
+use conways::grid::Grid;
 
 #[macroquad::main("Conway's Game of Life")]
 async fn main() {
