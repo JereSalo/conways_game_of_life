@@ -1,5 +1,3 @@
-
-
 use macroquad::prelude::*;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -8,6 +6,7 @@ enum Cell{
     Alive
 }
 
+// In Grid I store cols and rows just for easiness, I could obtain them right from cells.
 #[derive(Debug)]
 struct Grid{
     cells: Vec<Vec<Cell>>,
@@ -15,8 +14,17 @@ struct Grid{
     cols: usize,
 }
 
-impl Default for Grid{
-    fn default() -> Self {
+impl Grid{
+    // New grid with dead cells
+    fn new(rows: usize, cols: usize) -> Self {
+        Grid { 
+            cells: vec![vec![Cell::Dead; cols]; rows], 
+            rows, cols
+        }
+    }
+
+    // Example grid for testing
+    fn new_preloaded() -> Self{
         Grid { cells: vec![
             vec![Cell::Dead, Cell::Alive, Cell::Dead, Cell::Dead],
             vec![Cell::Alive, Cell::Alive, Cell::Dead, Cell::Dead],
@@ -24,28 +32,15 @@ impl Default for Grid{
             vec![Cell::Dead, Cell::Dead, Cell::Dead, Cell::Alive],
         ], rows: 4, cols:4 }
     }
-}
-
-impl Grid{
-    fn new(rows: usize, cols: usize, default_value: Cell) -> Self {
-        Grid { 
-            cells: vec![vec![default_value; cols]; rows], 
-            rows, cols
-        }
-    }
-
-    fn new_preloaded() -> Self{
-        Self::default()
-    }
 
     // Gets neighbors of a given position and counts how many of them are alive cells.
-    fn neighbors_alive(&self, x: usize, y: usize) -> u8 {
+    fn count_alive_neighbors(&self, x: usize, y: usize) -> u8 {
         let mut count = 0;
 
         let neighbors = self.get_neighbors(x, y);
 
         for neighbor in neighbors{
-            if self.cell_alive(neighbor.0, neighbor.1) {
+            if self.cells[neighbor.0][neighbor.1] == Cell::Alive {
                 count += 1;
             }
         }
@@ -53,11 +48,10 @@ impl Grid{
         count
     }
 
-    // Get all neighbors of a given position
-    // Handles the case in which there might be a position with fewer neighbors. 
-    //      e.g: [0,0]
+    // Get all neighbors of a given position (not the actual Cell velues, but their positions in the grid)
+    // Handles the case in which there might be a position with fewer neighbors. Like [0,0]
     fn get_neighbors(&self, x:usize, y:usize) -> Vec<(usize, usize)>{
-        let mut neighbors = Vec::new();
+        let mut neighbors: Vec<(usize, usize)> = Vec::new();
 
         // Relative positions
         let deltas = [
@@ -80,22 +74,19 @@ impl Grid{
         neighbors
     }
 
-    fn cell_alive(&self, x: usize, y: usize) -> bool {
-        self.cells[x][y] == Cell::Alive
-    }
-
+    // Calculates next generation and updates the grid with that result.
     fn update(&mut self) -> (){
         self.cells = self.calculate_next_gen();
     }
 
+    // For each cell in the grid calculates if in the next gen is going to be alive or not. Returns the next generation.
     fn calculate_next_gen(&self) -> Vec<Vec<Cell>> {
-        let mut ng: Vec<Vec<Cell>> = vec![vec![Cell::Dead; self.cols]; self.rows];
+        let mut next_gen: Vec<Vec<Cell>> = vec![vec![Cell::Dead; self.cols]; self.rows];
 
-        //TODO: Check if it is first rows then cols or the other way around
         for i in 0..self.rows{
             for j in 0..self.cols{
                 let current_gen_cell = self.cells[i][j];
-                let alive_neighbors = self.neighbors_alive(i, j);
+                let alive_neighbors = self.count_alive_neighbors(i, j);
                 let next_gen_cell = match current_gen_cell{
                     Cell::Dead => 
                         if alive_neighbors == 3 { Cell::Alive } 
@@ -104,37 +95,23 @@ impl Grid{
                         if alive_neighbors == 2 || alive_neighbors == 3 {Cell::Alive} 
                             else {Cell::Dead},
                 };
-                ng[i][j] = next_gen_cell;
+                next_gen[i][j] = next_gen_cell;
             }
         }
 
-        ng
+        next_gen
     }
-
-
 }
 
 #[macroquad::main("Conway's Game of Life")]
 async fn main() {
     clear_background(BLACK);
 
-    let mut grid = Grid::new_preloaded();
+    let mut grid = Grid::new_preloaded(); // This is an example grid
     loop {
+        // Here I should draw the grid on screen.
 
-        // So here I should update the grid I guess
-        
-        
-        // println!("{:?}", grid);
-        // grid.update();
-        
-        // println!("{}",a);
-        // break;
-
-        // 
-
-        // 
-
-
+        grid.update();
 
         next_frame().await
     }
@@ -147,7 +124,7 @@ mod tests {
 
     #[test]
     fn test_grid_initialization() {
-        let grid = Grid::new(4, 4, Cell::Dead);
+        let grid = Grid::new(4, 4);
         for row in &grid.cells {
             for &cell in row {
                 assert_eq!(cell, Cell::Dead);
@@ -165,23 +142,16 @@ mod tests {
     }
 
     #[test]
-    fn test_neighbors_alive() {
+    fn test_count_alive_neighbors() {
         let grid = Grid::new_preloaded();
         // Test the neighbors alive count for the cell at (1,1)
-        let alive_neighbors = grid.neighbors_alive(1, 1);
+        let alive_neighbors = grid.count_alive_neighbors(1, 1);
         assert_eq!(alive_neighbors, 3);
     }
 
     #[test]
-    fn test_cell_alive() {
-        let grid = Grid::new_preloaded();
-        assert!(grid.cell_alive(1, 1));  // This should be alive
-        assert!(!grid.cell_alive(0, 0)); // This should be dead
-    }
-
-    #[test]
     fn test_get_neighbors() {
-        let grid = Grid::new(4, 4, Cell::Dead);
+        let grid = Grid::new(4, 4);
         let neighbors = grid.get_neighbors(1, 1);
 
         // Check if all expected neighbors are present
@@ -193,10 +163,10 @@ mod tests {
     }
 
     #[test]
-    fn test_neighbors_alive_edge_case() {
+    fn test_count_alive_neighbors_edge_case() {
         let grid = Grid::new_preloaded();
 
-        let alive_neighbors = grid.neighbors_alive(0, 0);
+        let alive_neighbors = grid.count_alive_neighbors(0, 0);
         assert_eq!(alive_neighbors, 3);
     }
 
