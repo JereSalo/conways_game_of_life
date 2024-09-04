@@ -1,5 +1,4 @@
-extern crate rand as rand_crate; // Alias the rand crate
-use rand_crate::prelude::*; // Use the alias here
+use rand::prelude::*;
 
 use crate::cell::Cell;
 
@@ -29,7 +28,7 @@ impl Grid {
     }
 
     pub fn new_random(rows: usize, cols: usize) -> Self {
-        let mut rng = rand_crate::thread_rng();
+        let mut rng = rand::thread_rng();
         let mut cells = vec![vec![Cell::Dead; cols]; rows];
 
         for i in 0..rows {
