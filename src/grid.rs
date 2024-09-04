@@ -80,16 +80,16 @@ impl Grid {
             let new_y = y as isize + dy;
 
             // Only push neighbor to neighbors if it's position is valid
-            if new_x >= 0
-                && new_x < self.rows() as isize
-                && new_y >= 0
-                && new_y < self.cols() as isize
-            {
+            if self.cell_in_bounds(new_x, new_y){
                 neighbors.push((new_x as usize, new_y as usize));
             }
         }
 
         neighbors
+    }
+
+    fn cell_in_bounds(&self, x: isize, y: isize) -> bool{
+        x >= 0 && x < self.rows() as isize && y >= 0 && y < self.cols() as isize
     }
 
     // Calculates next generation and updates the grid with that result.
