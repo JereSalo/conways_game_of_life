@@ -11,7 +11,6 @@ enum Cell{
 #[derive(Debug)]
 struct Grid{
     cells: Vec<Vec<Cell>>,
-    next_gen: Vec<Vec<Cell>>,
     rows: usize,
     cols: usize,
 }
@@ -23,8 +22,7 @@ impl Default for Grid{
             vec![Cell::Alive, Cell::Alive, Cell::Dead, Cell::Dead],
             vec![Cell::Dead, Cell::Dead, Cell::Alive, Cell::Dead],
             vec![Cell::Dead, Cell::Dead, Cell::Dead, Cell::Alive],
-        ], rows: 4, cols:4, 
-        next_gen: vec![vec![Cell::Dead; 4];4] }
+        ], rows: 4, cols:4 }
     }
 }
 
@@ -32,7 +30,6 @@ impl Grid{
     fn new(rows: usize, cols: usize, default_value: Cell) -> Self {
         Grid { 
             cells: vec![vec![default_value; cols]; rows], 
-            next_gen: vec![vec![default_value; cols]; rows],
             rows, cols
         }
     }
