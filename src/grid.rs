@@ -54,38 +54,22 @@ impl Grid {
         Grid { cells }
     }
 
-    // Gets neighbors of a given position and counts how many of them are alive cells.
+    // Checks for valid neighbors and count how many of them are alive, returning that result.
     pub fn count_alive_neighbors(&self, x: usize, y: usize) -> u8 {
         let mut count = 0;
-
-        let neighbors = self.get_neighbors(x, y);
-
-        for neighbor in neighbors {
-            if self.cells[neighbor.0][neighbor.1] == Cell::Alive {
-                count += 1;
-            }
-        }
-
-        count
-    }
-
-    // Get all neighbors of a given position (not the actual Cell velues, but their positions in the grid)
-    // Handles the case in which there might be a position with fewer neighbors. Like [0,0]
-    pub fn get_neighbors(&self, x: usize, y: usize) -> Vec<(usize, usize)> {
-        let mut neighbors: Vec<(usize, usize)> = Vec::new();
 
         for (dx, dy) in DELTAS {
             // I use isize because result can be negative.
             let new_x = x as isize + dx;
             let new_y = y as isize + dy;
 
-            // Only push neighbor to neighbors if it's position is valid
-            if self.cell_in_bounds(new_x, new_y){
-                neighbors.push((new_x as usize, new_y as usize));
-            }
+            // Only increase the count if the position is valid and there is an alive cell in there.
+            if self.cell_in_bounds(new_x, new_y) && 
+                self.cells[new_x as usize][new_y as usize] == Cell::Alive 
+                    { count += 1; }
         }
 
-        neighbors
+        count
     }
 
     fn cell_in_bounds(&self, x: isize, y: isize) -> bool{
@@ -155,27 +139,6 @@ mod tests {
 
         let alive_neighbors = grid.count_alive_neighbors(0, 0);
         assert_eq!(alive_neighbors, 3);
-    }
-
-    #[test]
-    fn get_neighbors() {
-        let grid = Grid::new(4, 4);
-        let neighbors = grid.get_neighbors(1, 1);
-
-        // Check if all expected neighbors are present
-        assert_eq!(
-            neighbors,
-            vec![
-                (0, 0),
-                (0, 1),
-                (0, 2),
-                (1, 0),
-                (1, 2),
-                (2, 0),
-                (2, 1),
-                (2, 2),
-            ]
-        );
     }
 
     // This tests if the next 2 generations are calculated correctly
