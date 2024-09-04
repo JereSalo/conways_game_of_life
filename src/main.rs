@@ -1,5 +1,8 @@
 use macroquad::prelude::*;
 
+extern crate rand as rand_crate;  // Alias the rand crate
+use rand_crate::prelude::*;  // Use the alias here
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 enum Cell{
     Dead,
@@ -27,20 +30,25 @@ impl Grid{
         }
     }
 
-    // THIS IS ONLY FOR TESTING PURPOSES, I WILL DELETE IT AFTERWARDS
-    fn new_preloaded() -> Self{
-        Grid { cells: vec![
-            vec![Cell::Dead, Cell::Alive, Cell::Dead, Cell::Dead],
-            vec![Cell::Alive, Cell::Alive, Cell::Dead, Cell::Dead],
-            vec![Cell::Dead, Cell::Dead, Cell::Alive, Cell::Dead],
-            vec![Cell::Dead, Cell::Dead, Cell::Dead, Cell::Alive],
-        ] }
-    }
-
     fn new_from_cells(cells: Vec<Vec<Cell>>) -> Self {
         Grid { 
             cells
         }
+    }
+
+    fn new_random(rows: usize, cols: usize) -> Self {
+        let mut rng = rand_crate::thread_rng();
+        let mut cells = vec![vec![Cell::Dead; cols]; rows];
+        
+        for i in 0..rows {
+            for j in 0..cols {
+                if rng.gen_bool(0.5) {
+                    cells[i][j] = Cell::Alive;
+                }
+            }
+        }
+
+        Grid { cells }
     }
 
     // Gets neighbors of a given position and counts how many of them are alive cells.
@@ -115,9 +123,15 @@ impl Grid{
 async fn main() {
     clear_background(BLACK);
 
-    let mut grid = Grid::new_preloaded(); // This is an example grid
+    let mut grid = Grid::new_from_cells(vec![
+        vec![Cell::Dead, Cell::Alive, Cell::Dead, Cell::Dead],
+        vec![Cell::Alive, Cell::Alive, Cell::Dead, Cell::Dead],
+        vec![Cell::Dead, Cell::Dead, Cell::Alive, Cell::Dead],
+        vec![Cell::Dead, Cell::Dead, Cell::Dead, Cell::Alive],
+    ]); // This is an example grid, for testing purposes only
+
     loop {
-        // Here I should draw the grid on screen.
+        // Here I should draw the grid state on screen.
 
         grid.update();
 
@@ -207,5 +221,16 @@ mod tests {
         assert_eq!(*second_gen, expected_second_gen);
 
         assert_eq!(*third_gen, expected_third_gen);
+    }
+
+    // I tested it this way because possible combinations of a grid this size are 2^256, so we can be sure that there won't be a coincidence
+    #[test]
+    fn test_random(){
+        let grid1 = Grid::new_random(16, 16);
+        let grid2 = Grid::new_random(16, 16);
+
+        println!("{:?}", grid1);
+        println!("{:?}", grid2);
+        assert_ne!(grid1.cells, grid2.cells);
     }
 }
