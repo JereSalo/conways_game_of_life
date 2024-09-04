@@ -2,6 +2,18 @@ use rand::prelude::*;
 
 use crate::cell::Cell;
 
+// Useful const for getting neighbors of cell.
+const DELTAS: [(isize, isize); 8] = [
+    (-1, -1),
+    (-1, 0),
+    (-1, 1),
+    (0, -1),
+    (0, 1),
+    (1, -1),
+    (1, 0),
+    (1, 1),
+];
+
 #[derive(Debug)]
 pub struct Grid {
     pub cells: Vec<Vec<Cell>>,
@@ -62,19 +74,7 @@ impl Grid {
     pub fn get_neighbors(&self, x: usize, y: usize) -> Vec<(usize, usize)> {
         let mut neighbors: Vec<(usize, usize)> = Vec::new();
 
-        // Relative positions
-        let deltas = [
-            (-1, -1),
-            (-1, 0),
-            (-1, 1),
-            (0, -1),
-            /*(0,0),*/ (0, 1),
-            (1, -1),
-            (1, 0),
-            (1, 1),
-        ];
-
-        for (dx, dy) in &deltas {
+        for (dx, dy) in DELTAS {
             // I use isize because result can be negative.
             let new_x = x as isize + dx;
             let new_y = y as isize + dy;
