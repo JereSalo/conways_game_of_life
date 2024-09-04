@@ -32,7 +32,7 @@ impl Grid{
     fn new(rows: usize, cols: usize, default_value: Cell) -> Self {
         Grid { 
             cells: vec![vec![default_value; cols]; rows], 
-            next_gen: vec![vec![Cell::Dead; cols];rows],
+            next_gen: vec![vec![default_value; cols]; rows],
             rows, cols
         }
     }
@@ -87,24 +87,53 @@ impl Grid{
         self.cells[x][y] == Cell::Alive
     }
 
+    fn update(&mut self){
+        self.cells = self.calculate_next_gen();
+    }
+
+    fn calculate_next_gen(&self) -> Vec<Vec<Cell>> {
+        let mut ng: Vec<Vec<Cell>> = vec![vec![Cell::Dead; self.cols]; self.rows];
+
+        //TODO: Check if it is first rows then cols or the other way around
+        for i in 0..self.rows{
+            for j in 0..self.cols{
+                let current_gen_cell = self.cells[i][j];
+                let alive_neighbors = self.neighbors_alive(i, j);
+                let next_gen_cell = match current_gen_cell{
+                    Cell::Dead => 
+                        if alive_neighbors == 3 { Cell::Alive } 
+                            else {Cell::Dead},
+                    Cell::Alive => 
+                        if alive_neighbors == 2 || alive_neighbors == 3 {Cell::Alive} 
+                            else {Cell::Dead},
+                };
+                ng[i][j] = next_gen_cell;
+            }
+        }
+
+        ng
+    }
+
 
 }
 
 #[macroquad::main("Conway's Game of Life")]
 async fn main() {
     clear_background(BLACK);
-    let rows = 4;
-    let cols = 4;
 
-    let grid = Grid::new_preloaded();
+    let mut grid = Grid::new_preloaded();
     loop {
 
+        // So here I should update the grid I guess
         
-
+        
         // println!("{:?}", grid);
-        // let a = grid.neighbors_alive(2, 2);
+        // grid.update();
+        
         // println!("{}",a);
         // break;
+
+        // 
 
         // 
 
@@ -173,4 +202,6 @@ mod tests {
         let alive_neighbors = grid.neighbors_alive(0, 0);
         assert_eq!(alive_neighbors, 3);
     }
+
+    // I need to add tests for calculate_next_gen and things like that
 }
