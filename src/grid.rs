@@ -80,7 +80,7 @@ impl Grid {
             let new_y = y as isize + dy;
 
             // Only push neighbor to neighbors if it's position is valid
-            if self.cell_in_bounds(new_x, new_y) {
+            if self.cell_in_bounds(new_x, new_y){
                 neighbors.push((new_x as usize, new_y as usize));
             }
         }
@@ -88,7 +88,7 @@ impl Grid {
         neighbors
     }
 
-    fn cell_in_bounds(&self, x: isize, y: isize) -> bool {
+    fn cell_in_bounds(&self, x: isize, y: isize) -> bool{
         x >= 0 && x < self.rows() as isize && y >= 0 && y < self.cols() as isize
     }
 
@@ -132,7 +132,7 @@ mod tests {
     }
 
     #[test]
-    fn test_grid_initialization() {
+    fn grid_initialization() {
         let grid = Grid::new(4, 4);
         for row in grid.cells {
             for cell in row {
@@ -142,7 +142,7 @@ mod tests {
     }
 
     #[test]
-    fn test_count_alive_neighbors() {
+    fn count_alive_neighbors() {
         let grid = create_preloaded_grid();
         // Test the neighbors alive count for the cell at (1,1)
         let alive_neighbors = grid.count_alive_neighbors(1, 1);
@@ -150,7 +150,7 @@ mod tests {
     }
 
     #[test]
-    fn test_count_alive_neighbors_edge_case() {
+    fn count_alive_neighbors_edge_case() {
         let grid = create_preloaded_grid();
 
         let alive_neighbors = grid.count_alive_neighbors(0, 0);
@@ -158,7 +158,7 @@ mod tests {
     }
 
     #[test]
-    fn test_get_neighbors() {
+    fn get_neighbors() {
         let grid = Grid::new(4, 4);
         let neighbors = grid.get_neighbors(1, 1);
 
@@ -180,7 +180,7 @@ mod tests {
 
     // This tests if the next 2 generations are calculated correctly
     #[test]
-    fn test_next_generations() {
+    fn next_generations() {
         let mut grid = create_preloaded_grid();
 
         grid.update();
@@ -210,7 +210,7 @@ mod tests {
 
     // I tested it this way because possible combinations of a grid this size are 2^256, so we can be sure that there won't be a coincidence
     #[test]
-    fn test_random() {
+    fn random() {
         let grid1 = Grid::new_random(16, 16);
         let grid2 = Grid::new_random(16, 16);
 
