@@ -27,7 +27,7 @@ impl Grid{
         }
     }
 
-    // Example grid for testing. Tests will break if changed.
+    // THIS IS ONLY FOR TESTING PURPOSES, I WILL DELETE IT AFTERWARDS
     fn new_preloaded() -> Self{
         Grid { cells: vec![
             vec![Cell::Dead, Cell::Alive, Cell::Dead, Cell::Dead],
@@ -35,6 +35,12 @@ impl Grid{
             vec![Cell::Dead, Cell::Dead, Cell::Alive, Cell::Dead],
             vec![Cell::Dead, Cell::Dead, Cell::Dead, Cell::Alive],
         ] }
+    }
+
+    fn new_from_cells(cells: Vec<Vec<Cell>>) -> Self {
+        Grid { 
+            cells
+        }
     }
 
     // Gets neighbors of a given position and counts how many of them are alive cells.
@@ -124,6 +130,15 @@ async fn main() {
 mod tests {
     use super::*;
 
+    fn create_preloaded_grid() -> Grid {
+        Grid::new_from_cells(vec![
+            vec![Cell::Dead, Cell::Alive, Cell::Dead, Cell::Dead],
+            vec![Cell::Alive, Cell::Alive, Cell::Dead, Cell::Dead],
+            vec![Cell::Dead, Cell::Dead, Cell::Alive, Cell::Dead],
+            vec![Cell::Dead, Cell::Dead, Cell::Dead, Cell::Alive],
+        ])
+    }
+
     #[test]
     fn test_grid_initialization() {
         let grid = Grid::new(4, 4);
@@ -135,17 +150,8 @@ mod tests {
     }
 
     #[test]
-    fn test_preloaded_grid() {
-        let grid = Grid::new_preloaded();
-        assert_eq!(grid.cells[0][1], Cell::Alive);
-        assert_eq!(grid.cells[1][0], Cell::Alive);
-        assert_eq!(grid.cells[2][2], Cell::Alive);
-        assert_eq!(grid.cells[3][3], Cell::Alive);
-    }
-
-    #[test]
     fn test_count_alive_neighbors() {
-        let grid = Grid::new_preloaded();
+        let grid = create_preloaded_grid();
         // Test the neighbors alive count for the cell at (1,1)
         let alive_neighbors = grid.count_alive_neighbors(1, 1);
         assert_eq!(alive_neighbors, 3);
@@ -166,7 +172,7 @@ mod tests {
 
     #[test]
     fn test_count_alive_neighbors_edge_case() {
-        let grid = Grid::new_preloaded();
+        let grid = create_preloaded_grid();
 
         let alive_neighbors = grid.count_alive_neighbors(0, 0);
         assert_eq!(alive_neighbors, 3);
@@ -176,7 +182,7 @@ mod tests {
     // This tests if the next 2 generations are calculated correctly
     #[test]
     fn test_next_generations() {
-        let mut grid = Grid::new_preloaded();
+        let mut grid = create_preloaded_grid();
 
         grid.update();
         let second_gen = grid.cells.clone();
