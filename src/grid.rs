@@ -64,15 +64,17 @@ impl Grid {
             let new_y = y as isize + dy;
 
             // Only increase the count if the position is valid and there is an alive cell in there.
-            if self.cell_in_bounds(new_x, new_y) && 
-                self.cells[new_x as usize][new_y as usize] == Cell::Alive 
-                    { count += 1; }
+            if self.cell_in_bounds(new_x, new_y)
+                && self.cells[new_x as usize][new_y as usize] == Cell::Alive
+            {
+                count += 1;
+            }
         }
 
         count
     }
 
-    fn cell_in_bounds(&self, x: isize, y: isize) -> bool{
+    fn cell_in_bounds(&self, x: isize, y: isize) -> bool {
         x >= 0 && x < self.rows() as isize && y >= 0 && y < self.cols() as isize
     }
 
