@@ -1,32 +1,23 @@
-use std::arch::aarch64::int16x4_t;
-
 use macroquad::prelude::*;
 
-enum Cell{
-    Dead,
-    Alive
-}
-
-impl Cell{
-
-    // Gets alive neighbors of the cell (it's a number between 0 and 8)
-    fn get_alive_neighbors(&self) -> u8 {
-        todo!();
-    }
-}
-
+use conways::cell::Cell;
+use conways::grid::Grid;
 
 #[macroquad::main("Conway's Game of Life")]
 async fn main() {
+    clear_background(BLACK);
+
+    let mut grid = Grid::new_from_cells(vec![
+        vec![Cell::Dead, Cell::Alive, Cell::Dead, Cell::Dead],
+        vec![Cell::Alive, Cell::Alive, Cell::Dead, Cell::Dead],
+        vec![Cell::Dead, Cell::Dead, Cell::Alive, Cell::Dead],
+        vec![Cell::Dead, Cell::Dead, Cell::Dead, Cell::Alive],
+    ]); // This is an example grid, for testing purposes only
+
     loop {
-        clear_background(BLACK);
+        // Here I should draw the grid state on screen I guess.
 
-        // Cell: Enum?
-        //  Attributes: Position on a grid, a state (dead or alive)
-        //  Methods: next_state (calculates how many neighbors alive and decides whether or not it lives or dies)
-
-        // Grid
-        //  
+        grid.update();
 
         next_frame().await
     }
