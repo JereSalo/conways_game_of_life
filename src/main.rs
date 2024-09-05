@@ -9,12 +9,11 @@ use conways::grid::Grid;
 async fn main() {
     let mut grid = Grid::new_random(50, 50);
     let mut paused = false;
+    let mut show_info = true;
 
     loop {
         // If it is not paused 
-        if !paused{
-            grid.update();
-        }
+        clear_background(BLACK);
 
         // Cell width and height. I define these in every tick cause screen can be resized.
         let cell_w = screen_width() / grid.cols() as f32;
@@ -37,7 +36,28 @@ async fn main() {
             Some(KeyCode::R) => grid = Grid::new_random(50, 50),
             Some(KeyCode::C) => grid = Grid::new(50, 50),
             Some(KeyCode::Space) => paused = !paused,
+            Some(KeyCode::I) => show_info = !show_info,
             Some(_) | None => {}
+        }
+
+        if show_info{
+            let info = "'I' to toggle info on/off\n\
+            'R' to generate random grid\n\
+            'C' to clear the grid\n\
+            'Space' to play/pause\n\
+            'Click' to kill/revive cells (TBD)";
+            // Show key bindings
+            let w = screen_width();
+            let h = screen_height();
+            draw_rectangle(w*0.2, h*0.7, w*0.6, h*0.26, BLACK);
+            draw_multiline_text(info, w* 0.25, h* 0.75, h*0.038, Some(h / 800.), WHITE);
+        }
+
+        if !paused{
+            grid.update();
+        } else{
+            // Let user kill/revive cells
+            
         }
 
         std::thread::sleep(Duration::from_millis(40));
