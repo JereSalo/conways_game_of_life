@@ -43,6 +43,7 @@ impl Grid {
         let mut rng = rand::thread_rng();
         let mut cells = vec![vec![Cell::Dead; cols]; rows];
 
+        #[allow(clippy::needless_range_loop)]
         for i in 0..rows {
             for j in 0..cols {
                 if rng.gen_bool(0.5) {
@@ -87,6 +88,7 @@ impl Grid {
     pub fn calculate_next_gen(&self) -> Vec<Vec<Cell>> {
         let mut next_gen: Vec<Vec<Cell>> = vec![vec![Cell::Dead; self.cols()]; self.rows()];
 
+        #[allow(clippy::needless_range_loop)]
         for i in 0..self.rows() {
             for j in 0..self.cols() {
                 let current_gen_cell = self.cells[i][j];
