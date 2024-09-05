@@ -57,7 +57,10 @@ async fn main() {
             grid.update();
         } else{
             // Let user kill/revive cells
-            
+
+            // 1. Get user's mouse location at the time of the click.
+            // 2. With that position (x,y) calculate [i][j] given cell_w and cell_h
+            // 3. Change that cell's state in 
         }
 
         std::thread::sleep(Duration::from_millis(40));
