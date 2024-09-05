@@ -7,8 +7,8 @@ use conways::grid::Grid;
 
 #[macroquad::main("Conway's Game of Life")]
 async fn main() {
-    let mut grid = Grid::new_random(50, 50);
-    let mut paused = false;
+    let mut grid = Grid::new(50, 50);
+    let mut paused = true;
     let mut show_info = true;
 
     loop {
@@ -56,6 +56,9 @@ async fn main() {
         if !paused{
             grid.update();
         } else{
+            // Just to show that it's paused without being invasive.
+            draw_hexagon(20.0, 20.0, 15.0, 2.0, true, RED, RED);
+            
             // Let user kill/revive cells
 
             // 1. Get user's mouse location at the time of the click.
