@@ -1,7 +1,6 @@
 use std::ops::Not;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-
 pub enum Cell {
     Dead,
     Alive,

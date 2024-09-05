@@ -55,18 +55,21 @@ async fn main() {
 
         if !paused{
             grid.update();
+            std::thread::sleep(Duration::from_millis(40));
         } else{
             // Just to show that it's paused without being invasive.
             draw_hexagon(20.0, 20.0, 15.0, 2.0, true, RED, RED);
-            
+
             // Let user kill/revive cells
+            if is_mouse_button_released(MouseButton::Left) {
+                let (x,y) = mouse_position();
 
-            // 1. Get user's mouse location at the time of the click.
-            // 2. With that position (x,y) calculate [i][j] given cell_w and cell_h
-            // 3. Change that cell's state in 
+                let i = (y/cell_h) as usize;
+                let j = (x/cell_w) as usize;
+
+                grid.cells[i][j] = !grid.cells[i][j];
+            }
         }
-
-        std::thread::sleep(Duration::from_millis(40));
 
         next_frame().await
     }
