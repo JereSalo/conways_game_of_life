@@ -8,24 +8,19 @@ use conways::grid::Grid;
 #[macroquad::main("Conway's Game of Life")]
 async fn main() {
     let mut grid = Grid::new_random(50, 50);
+    let mut paused = false;
 
     loop {
-        // Handle KeyPress: R (Reset), Space (Play/Pause)
-        // Reset: Create random grid
-        match get_char_pressed() {
-            // Reset, by now, generates a random grid. Maybe it will just generate a clear grid in the future.
-            Some('r' | 'R') => grid = Grid::new_random(50, 50),
-            Some(' ') => println!("Space: Play/Pause"),
-            Some(c) => println!("You pressed another key: {}", c),
-            None => {}
+        // If it is not paused 
+        if !paused{
+            grid.update();
         }
 
-        clear_background(BLACK);
-        
         // Cell width and height. I define these in every tick cause screen can be resized.
         let cell_w = screen_width() / grid.cols() as f32;
         let cell_h = screen_height() / grid.rows() as f32;
 
+        // Draw Board
         #[allow(clippy::needless_range_loop)]
         for i in 0..grid.rows() {
             for j in 0..grid.cols() {
@@ -37,9 +32,15 @@ async fn main() {
             draw_line(cell_w*i as f32, 0.0, cell_w*i as f32, screen_height(), 1.0, GRAY);
         }
 
-        grid.update();
+        // Handle KeyPress: R (Random), C (Clear), Space (Play/Pause)
+        match get_last_key_pressed(){
+            Some(KeyCode::R) => grid = Grid::new_random(50, 50),
+            Some(KeyCode::C) => grid = Grid::new(50, 50),
+            Some(KeyCode::Space) => paused = !paused,
+            Some(_) | None => {}
+        }
 
-        std::thread::sleep(Duration::from_millis(50));
+        std::thread::sleep(Duration::from_millis(40));
 
         next_frame().await
     }
