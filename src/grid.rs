@@ -43,6 +43,7 @@ impl Grid {
         let mut rng = rand::thread_rng();
         let mut cells = vec![vec![Cell::Dead; cols]; rows];
 
+        #[allow(clippy::needless_range_loop)]
         for i in 0..rows {
             for j in 0..cols {
                 if rng.gen_bool(0.5) {
@@ -64,15 +65,17 @@ impl Grid {
             let new_y = y as isize + dy;
 
             // Only increase the count if the position is valid and there is an alive cell in there.
-            if self.cell_in_bounds(new_x, new_y) && 
-                self.cells[new_x as usize][new_y as usize] == Cell::Alive 
-                    { count += 1; }
+            if self.cell_in_bounds(new_x, new_y)
+                && self.cells[new_x as usize][new_y as usize] == Cell::Alive
+            {
+                count += 1;
+            }
         }
 
         count
     }
 
-    fn cell_in_bounds(&self, x: isize, y: isize) -> bool{
+    fn cell_in_bounds(&self, x: isize, y: isize) -> bool {
         x >= 0 && x < self.rows() as isize && y >= 0 && y < self.cols() as isize
     }
 
@@ -85,6 +88,7 @@ impl Grid {
     pub fn calculate_next_gen(&self) -> Vec<Vec<Cell>> {
         let mut next_gen: Vec<Vec<Cell>> = vec![vec![Cell::Dead; self.cols()]; self.rows()];
 
+        #[allow(clippy::needless_range_loop)]
         for i in 0..self.rows() {
             for j in 0..self.cols() {
                 let current_gen_cell = self.cells[i][j];
