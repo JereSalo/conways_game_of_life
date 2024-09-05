@@ -10,8 +10,12 @@ async fn main() {
     let mut grid = Grid::new_random(50, 50);
 
     loop {
+        // Handle KeyPress: R (Reset), Space (Play/Pause)
+        // Reset: Create random grid
+
         clear_background(BLACK);
-        // screen_width() and screen_height() to get it in real time. Measured in pixels. Default is 800x600
+        
+        // Cell width and height. I define these in every tick cause screen can be resized.
         let cell_w = screen_width() / grid.cols() as f32;
         let cell_h = screen_height() / grid.rows() as f32;
 
