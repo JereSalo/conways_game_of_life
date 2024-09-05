@@ -35,10 +35,6 @@ impl Grid {
         }
     }
 
-    pub fn new_from_cells(cells: Vec<Vec<Cell>>) -> Self {
-        Grid { cells }
-    }
-
     pub fn new_random(rows: usize, cols: usize) -> Self {
         let mut rng = rand::thread_rng();
         let mut cells = vec![vec![Cell::Dead; cols]; rows];
@@ -111,12 +107,15 @@ mod tests {
     use super::*;
 
     fn create_preloaded_grid() -> Grid {
-        Grid::new_from_cells(vec![
+        let mut grid = Grid::new(4, 4);
+        grid.cells = vec![
             vec![Cell::Dead, Cell::Alive, Cell::Dead, Cell::Dead],
             vec![Cell::Alive, Cell::Alive, Cell::Dead, Cell::Dead],
             vec![Cell::Dead, Cell::Dead, Cell::Alive, Cell::Dead],
             vec![Cell::Dead, Cell::Dead, Cell::Dead, Cell::Alive],
-        ])
+        ];
+        
+        grid
     }
 
     #[test]

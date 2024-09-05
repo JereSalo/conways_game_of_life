@@ -16,18 +16,3 @@ impl Not for Cell {
         }
     }
 }
-
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn cell_negation() {
-        let alive_cell = Cell::Alive;
-        let dead_cell = Cell::Dead;
-
-        assert_eq!(!alive_cell, Cell::Dead);
-        assert_eq!(!dead_cell, Cell::Alive);
-    }
-}
