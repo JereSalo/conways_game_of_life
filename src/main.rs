@@ -12,6 +12,13 @@ async fn main() {
     loop {
         // Handle KeyPress: R (Reset), Space (Play/Pause)
         // Reset: Create random grid
+        match get_char_pressed() {
+            // Reset, by now, generates a random grid. Maybe it will just generate a clear grid in the future.
+            Some('r' | 'R') => grid = Grid::new_random(50, 50),
+            Some(' ') => println!("Space: Play/Pause"),
+            Some(c) => println!("You pressed another key: {}", c),
+            None => {}
+        }
 
         clear_background(BLACK);
         
