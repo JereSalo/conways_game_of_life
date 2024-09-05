@@ -20,11 +20,11 @@ pub struct Grid {
 }
 
 impl Grid {
-    fn rows(&self) -> usize {
+    pub fn rows(&self) -> usize {
         self.cells.len()
     }
 
-    fn cols(&self) -> usize {
+    pub fn cols(&self) -> usize {
         self.cells[0].len()
     }
 
