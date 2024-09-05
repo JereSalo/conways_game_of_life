@@ -114,7 +114,7 @@ mod tests {
             vec![Cell::Dead, Cell::Dead, Cell::Alive, Cell::Dead],
             vec![Cell::Dead, Cell::Dead, Cell::Dead, Cell::Alive],
         ];
-        
+
         grid
     }
 
