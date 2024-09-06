@@ -9,6 +9,16 @@ use crate::grid::Grid;
 const ROWS: usize = 50;
 const COLS: usize = 50;
 
+/// UI representation
+/// ## Attributes
+/// - grid: Stores the state of cells
+/// - paused: True if game is paused
+/// - show_info: If true, shows info in UI
+/// - scr_w: Screen Width
+/// - scr_h: Screen Height
+/// - cell_w: Cell Width
+/// - cell_h: Cell Height\
+/// Last 4 attributes are necessary cause window can be resized during execution.
 pub struct UI {
     grid: Grid,
     paused: bool,
@@ -26,10 +36,12 @@ impl Default for UI {
 }
 
 impl UI {
+    /// Runs the game
     pub async fn run(&mut self) {
         loop {
             clear_background(BLACK);
 
+            // Width and Height are set on every tick cause screen can be resized.
             self.get_screen_and_cell_size();
 
             self.draw_board();
@@ -54,6 +66,7 @@ impl UI {
         }
     }
 
+    /// Creates new UI
     pub fn new() -> Self {
         UI {
             grid: Grid::new(ROWS, COLS),
@@ -66,8 +79,8 @@ impl UI {
         }
     }
 
+    /// Draws the physical board in the UI
     fn draw_board(&self) {
-        // Draw Board
         for i in 0..self.grid.rows() {
             for j in 0..self.grid.cols() {
                 if self.grid.cells[i][j] == Cell::Alive {
@@ -80,7 +93,7 @@ impl UI {
                     );
                 }
             }
-            // Draw vertical an horizontal lines of grid
+            // Draw vertical and horizontal lines of grid
             draw_line(
                 0.0,
                 self.cell_h * i as f32,
@@ -100,14 +113,15 @@ impl UI {
         }
     }
 
+    /// Gets screen size and based on that calculates cell size for drawing them in screen.
     fn get_screen_and_cell_size(&mut self) {
-        // Width and Height are defined on every tick cause screen can be resized.
         self.scr_w = screen_width();
         self.scr_h = screen_height();
         self.cell_w = self.scr_w / self.grid.cols() as f32;
         self.cell_h = self.scr_h / self.grid.rows() as f32;
     }
 
+    /// Takes action when user presses certain keys
     fn handle_key_press(&mut self) {
         // Handle KeyPress: R (Random), C (Clear), Space (Play/Pause), I (Toggle Info), Q (Quit)
         match get_last_key_pressed() {
@@ -120,6 +134,7 @@ impl UI {
         }
     }
 
+    /// Show information of key bindings on display
     fn show_info(&mut self) {
         let info = "'I' to toggle info on/off\n\
         'R' to generate random grid\n\
@@ -146,8 +161,8 @@ impl UI {
         );
     }
 
+    /// Allows user to toggle the state of cells in the grid with left mouse button
     fn handle_cell_interaction(&mut self) {
-        // Let user kill/revive cells
         if is_mouse_button_released(MouseButton::Left) {
             let (x, y) = mouse_position();
 
