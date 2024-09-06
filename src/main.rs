@@ -23,7 +23,6 @@ async fn main() {
         let cell_h = scr_h / grid.rows() as f32;
 
         // Draw Board
-        #[allow(clippy::needless_range_loop)]
         for i in 0..grid.rows() {
             for j in 0..grid.cols() {
                 if grid.cells[i][j] == Cell::Alive {
