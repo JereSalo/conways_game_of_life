@@ -20,27 +20,31 @@ pub struct UI{
 }
 
 impl UI{
-    pub fn run(&mut self){
-        clear_background(BLACK);
+    pub async fn run(&mut self){
+        loop {
+            clear_background(BLACK);
 
-        self.get_screen_and_cell_size();
+            self.get_screen_and_cell_size();
 
-        self.draw_board();
+            self.draw_board();
 
-        self.handle_key_press();
+            self.handle_key_press();
+            
+            if self.show_info {
+                self.show_info();
+            }
+
+            if !self.paused {
+                self.grid.update();
+                std::thread::sleep(Duration::from_millis(40));
+            } else {
+                // Just to show that it's paused without being invasive.
+                draw_hexagon(20.0, 20.0, 15.0, 2.0, true, RED, RED);
+
+                self.handle_cell_interaction();
+            }
         
-        if self.show_info {
-            self.show_info();
-        }
-
-        if !self.paused {
-            self.grid.update();
-            std::thread::sleep(Duration::from_millis(40));
-        } else {
-            // Just to show that it's paused without being invasive.
-            draw_hexagon(20.0, 20.0, 15.0, 2.0, true, RED, RED);
-
-            self.handle_cell_interaction();
+            next_frame().await;
         }
     }
 
