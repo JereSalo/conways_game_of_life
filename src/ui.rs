@@ -9,7 +9,7 @@ use crate::grid::Grid;
 const ROWS: usize = 50;
 const COLS: usize = 50;
 
-pub struct UI{
+pub struct UI {
     grid: Grid,
     paused: bool,
     show_info: bool,
@@ -19,8 +19,8 @@ pub struct UI{
     cell_h: f32,
 }
 
-impl UI{
-    pub async fn run(&mut self){
+impl UI {
+    pub async fn run(&mut self) {
         loop {
             clear_background(BLACK);
 
@@ -29,7 +29,7 @@ impl UI{
             self.draw_board();
 
             self.handle_key_press();
-            
+
             if self.show_info {
                 self.show_info();
             }
@@ -43,37 +43,58 @@ impl UI{
 
                 self.handle_cell_interaction();
             }
-        
+
             next_frame().await;
         }
     }
 
-    pub fn new() -> Self{
-        UI {grid: Grid::new(ROWS,COLS),
-             paused: true, 
-             show_info: true, 
-             scr_w: 0.,
-             scr_h: 0.,
-             cell_w: 0.,
-             cell_h: 0.
+    pub fn new() -> Self {
+        UI {
+            grid: Grid::new(ROWS, COLS),
+            paused: true,
+            show_info: true,
+            scr_w: 0.,
+            scr_h: 0.,
+            cell_w: 0.,
+            cell_h: 0.,
         }
     }
 
-    fn draw_board(&self){
-          // Draw Board
-          for i in 0..self.grid.rows() {
+    fn draw_board(&self) {
+        // Draw Board
+        for i in 0..self.grid.rows() {
             for j in 0..self.grid.cols() {
                 if self.grid.cells[i][j] == Cell::Alive {
-                    draw_rectangle(self.cell_w * j as f32, self.cell_h * i as f32, self.cell_w, self.cell_h, WHITE);
+                    draw_rectangle(
+                        self.cell_w * j as f32,
+                        self.cell_h * i as f32,
+                        self.cell_w,
+                        self.cell_h,
+                        WHITE,
+                    );
                 }
             }
             // Draw vertical an horizontal lines of grid
-            draw_line(0.0, self.cell_h * i as f32, self.scr_w, self.cell_h * i as f32, 1.0, GRAY);
-            draw_line(self.cell_w * i as f32, 0.0, self.cell_w * i as f32, self.scr_h, 1.0, GRAY);
+            draw_line(
+                0.0,
+                self.cell_h * i as f32,
+                self.scr_w,
+                self.cell_h * i as f32,
+                1.0,
+                GRAY,
+            );
+            draw_line(
+                self.cell_w * i as f32,
+                0.0,
+                self.cell_w * i as f32,
+                self.scr_h,
+                1.0,
+                GRAY,
+            );
         }
     }
 
-    fn get_screen_and_cell_size(&mut self){
+    fn get_screen_and_cell_size(&mut self) {
         // Width and Height are defined on every tick cause screen can be resized.
         self.scr_w = screen_width();
         self.scr_h = screen_height();
@@ -81,7 +102,7 @@ impl UI{
         self.cell_h = self.scr_h / self.grid.rows() as f32;
     }
 
-    fn handle_key_press(&mut self){
+    fn handle_key_press(&mut self) {
         // Handle KeyPress: R (Random), C (Clear), Space (Play/Pause), I (Toggle Info), Q (Quit)
         match get_last_key_pressed() {
             Some(KeyCode::R) => self.grid = Grid::new_random(ROWS, COLS),
@@ -93,7 +114,7 @@ impl UI{
         }
     }
 
-    fn show_info(&mut self){
+    fn show_info(&mut self) {
         let info = "'I' to toggle info on/off\n\
         'R' to generate random grid\n\
         'C' to clear the grid\n\
@@ -102,7 +123,13 @@ impl UI{
         'Q' to quit the game";
         // Show key bindings
 
-        draw_rectangle(self.scr_w * 0.2, self.scr_h * 0.7, self.scr_w * 0.6, self.scr_h * 0.26, BLACK);
+        draw_rectangle(
+            self.scr_w * 0.2,
+            self.scr_h * 0.7,
+            self.scr_w * 0.6,
+            self.scr_h * 0.26,
+            BLACK,
+        );
         draw_multiline_text(
             info,
             self.scr_w * 0.25,
@@ -113,7 +140,7 @@ impl UI{
         );
     }
 
-    fn handle_cell_interaction(&mut self){
+    fn handle_cell_interaction(&mut self) {
         // Let user kill/revive cells
         if is_mouse_button_released(MouseButton::Left) {
             let (x, y) = mouse_position();
