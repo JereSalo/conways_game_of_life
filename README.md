@@ -16,5 +16,5 @@
 **Click** – Toggle Cell State
 
 ## Video
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/kK1KPuIZW10/0.jpg)](https://www.youtube.com/watch?v=kK1KPuIZW10)
+https://github.com/user-attachments/assets/25d17a9a-9457-45e3-8e4e-f53fd5cf1add
 
