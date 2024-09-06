@@ -15,6 +15,6 @@
 **Space** – Play/Pause\
 **Click** – Toggle Cell State
 
-## Video
+## Demo
 https://github.com/user-attachments/assets/25d17a9a-9457-45e3-8e4e-f53fd5cf1add
 
