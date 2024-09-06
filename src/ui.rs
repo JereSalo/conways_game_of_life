@@ -10,9 +10,9 @@ const ROWS: usize = 50;
 const COLS: usize = 50;
 
 pub struct UI{
-    pub grid: Grid,
-    pub paused: bool,
-    pub show_info: bool
+    grid: Grid,
+    paused: bool,
+    show_info: bool
 }
 
 impl UI{
