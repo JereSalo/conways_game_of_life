@@ -5,10 +5,13 @@ use macroquad::prelude::*;
 use conways::cell::Cell;
 use conways::grid::Grid;
 
+const ROWS: usize = 50;
+const COLS: usize = 50;
+
+
 #[macroquad::main("Conway's Game of Life")]
 async fn main() {
-    let (rows, cols) = (50, 50);
-    let mut grid = Grid::new(rows, cols);
+    let mut grid = Grid::new(ROWS, COLS);
     let mut paused = true;
     let mut show_info = true;
 
@@ -36,8 +39,8 @@ async fn main() {
 
         // Handle KeyPress: R (Random), C (Clear), Space (Play/Pause), I (Toggle Info)
         match get_last_key_pressed() {
-            Some(KeyCode::R) => grid = Grid::new_random(rows, cols),
-            Some(KeyCode::C) => grid = Grid::new(rows, cols),
+            Some(KeyCode::R) => grid = Grid::new_random(ROWS, COLS),
+            Some(KeyCode::C) => grid = Grid::new(ROWS, COLS),
             Some(KeyCode::Space) => paused = !paused,
             Some(KeyCode::I) => show_info = !show_info,
             Some(_) | None => {}
