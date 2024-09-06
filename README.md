@@ -19,4 +19,5 @@ A *Rust* implementation of Conway's Game of Life, using the game library *macroq
 **Click** – Toggle Cell State
 
 ## Video
-(example video)
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/kK1KPuIZW10/0.jpg)](https://www.youtube.com/watch?v=kK1KPuIZW10)
+
