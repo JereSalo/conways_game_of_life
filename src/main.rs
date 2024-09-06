@@ -1,3 +1,4 @@
+use std::process;
 use std::time::Duration;
 
 use macroquad::prelude::*;
@@ -43,6 +44,7 @@ async fn main() {
             Some(KeyCode::C) => grid = Grid::new(ROWS, COLS),
             Some(KeyCode::Space) => paused = !paused,
             Some(KeyCode::I) => show_info = !show_info,
+            Some(KeyCode::Q) => process::exit(0),
             Some(_) | None => {}
         }
 
@@ -51,7 +53,8 @@ async fn main() {
             'R' to generate random grid\n\
             'C' to clear the grid\n\
             'Space' to play/pause\n\
-            'Click' to kill/revive cells";
+            'Click' to kill/revive cells\n\
+            'Q' to quit the game";
             // Show key bindings
 
             draw_rectangle(scr_w * 0.2, scr_h * 0.7, scr_w * 0.6, scr_h * 0.26, BLACK);
@@ -59,7 +62,7 @@ async fn main() {
                 info,
                 scr_w * 0.25,
                 scr_h * 0.75,
-                scr_h * 0.038,
+                scr_h * 0.034,
                 Some(scr_h / 800.),
                 WHITE,
             );
