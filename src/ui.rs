@@ -17,7 +17,6 @@ pub struct UI{
 
 impl UI{
     pub fn run(&mut self){
-        // If it is not paused
         clear_background(BLACK);
 
         // Width and Height are defined on every tick cause screen can be resized.
@@ -38,7 +37,7 @@ impl UI{
             draw_line(cell_w * i as f32, 0.0, cell_w * i as f32, scr_h, 1.0, GRAY);
         }
 
-        // Handle KeyPress: R (Random), C (Clear), Space (Play/Pause), I (Toggle Info)
+        // Handle KeyPress: R (Random), C (Clear), Space (Play/Pause), I (Toggle Info), Q (Quit)
         match get_last_key_pressed() {
             Some(KeyCode::R) => self.grid = Grid::new_random(ROWS, COLS),
             Some(KeyCode::C) => self.grid = Grid::new(ROWS, COLS),
