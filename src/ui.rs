@@ -19,6 +19,12 @@ pub struct UI {
     cell_h: f32,
 }
 
+impl Default for UI {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl UI {
     pub async fn run(&mut self) {
         loop {
