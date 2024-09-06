@@ -2,7 +2,7 @@ use rand::prelude::*;
 
 use crate::cell::Cell;
 
-// Useful const for getting neighbors of cell.
+/// Useful const for getting neighbors of cell.
 const DELTAS: [(isize, isize); 8] = [
     (-1, -1),
     (-1, 0),
@@ -20,25 +20,24 @@ pub struct Grid {
 }
 
 impl Grid {
-    fn rows(&self) -> usize {
+    /// Gets how many rows the grid has.
+    pub fn rows(&self) -> usize {
         self.cells.len()
     }
 
-    fn cols(&self) -> usize {
+    /// Gets how many cols the grid has.
+    pub fn cols(&self) -> usize {
         self.cells[0].len()
     }
 
-    // New grid with dead cells
+    /// New grid with dead cells
     pub fn new(rows: usize, cols: usize) -> Self {
         Grid {
             cells: vec![vec![Cell::Dead; cols]; rows],
         }
     }
 
-    pub fn new_from_cells(cells: Vec<Vec<Cell>>) -> Self {
-        Grid { cells }
-    }
-
+    /// New grid with random cells (dead or alive)
     pub fn new_random(rows: usize, cols: usize) -> Self {
         let mut rng = rand::thread_rng();
         let mut cells = vec![vec![Cell::Dead; cols]; rows];
@@ -55,7 +54,7 @@ impl Grid {
         Grid { cells }
     }
 
-    // Checks for valid neighbors and count how many of them are alive, returning that result.
+    /// Checks for valid neighbors of a cell and returns how many of them are alive.
     pub fn count_alive_neighbors(&self, x: usize, y: usize) -> u8 {
         let mut count = 0;
 
@@ -75,16 +74,23 @@ impl Grid {
         count
     }
 
+    /// Checks if a cell/point is in the grid.
     fn cell_in_bounds(&self, x: isize, y: isize) -> bool {
         x >= 0 && x < self.rows() as isize && y >= 0 && y < self.cols() as isize
     }
 
-    // Calculates next generation and updates the grid with that result.
+    /// Calculates next generation and updates the grid state with that result.
+    /// ## Example
+    /// ```
+    /// use conways::grid::Grid;
+    /// let mut grid = Grid::new(50,50);
+    /// grid.update();
+    /// ```
     pub fn update(&mut self) {
         self.cells = self.calculate_next_gen();
     }
 
-    // For each cell in the grid calculates if in the next gen is going to be alive or not. Returns the next generation.
+    /// For each cell in the grid calculates if in the next gen is going to be alive or not. Returns the next generation.
     pub fn calculate_next_gen(&self) -> Vec<Vec<Cell>> {
         let mut next_gen: Vec<Vec<Cell>> = vec![vec![Cell::Dead; self.cols()]; self.rows()];
 
@@ -111,12 +117,15 @@ mod tests {
     use super::*;
 
     fn create_preloaded_grid() -> Grid {
-        Grid::new_from_cells(vec![
+        let mut grid = Grid::new(4, 4);
+        grid.cells = vec![
             vec![Cell::Dead, Cell::Alive, Cell::Dead, Cell::Dead],
             vec![Cell::Alive, Cell::Alive, Cell::Dead, Cell::Dead],
             vec![Cell::Dead, Cell::Dead, Cell::Alive, Cell::Dead],
             vec![Cell::Dead, Cell::Dead, Cell::Dead, Cell::Alive],
-        ])
+        ];
+
+        grid
     }
 
     #[test]
