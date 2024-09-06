@@ -42,11 +42,10 @@ impl Grid {
         let mut rng = rand::thread_rng();
         let mut cells = vec![vec![Cell::Dead; cols]; rows];
 
-        #[allow(clippy::needless_range_loop)]
-        for i in 0..rows {
-            for j in 0..cols {
+        for row in cells.iter_mut() {
+            for cell in row.iter_mut() {
                 if rng.gen_bool(0.5) {
-                    cells[i][j] = Cell::Alive;
+                    *cell = Cell::Alive;
                 }
             }
         }
@@ -94,10 +93,9 @@ impl Grid {
     pub fn calculate_next_gen(&self) -> Vec<Vec<Cell>> {
         let mut next_gen: Vec<Vec<Cell>> = vec![vec![Cell::Dead; self.cols()]; self.rows()];
 
-        #[allow(clippy::needless_range_loop)]
-        for i in 0..self.rows() {
-            for j in 0..self.cols() {
-                let current_gen_cell = self.cells[i][j];
+        for (i,row) in self.cells.iter().enumerate(){
+            for (j, cell) in row.iter().enumerate(){
+                let current_gen_cell = *cell;
                 let alive_neighbors = self.count_alive_neighbors(i, j);
                 let next_gen_cell = match current_gen_cell {
                     Cell::Alive if alive_neighbors == 2 || alive_neighbors == 3 => Cell::Alive,
