@@ -18,7 +18,7 @@ const COLS: usize = 50;
 /// - scr_h: Screen Height
 /// - cell_w: Cell Width
 /// - cell_h: Cell Height\
-/// Last 4 attributes are necessary cause window can be resized during execution.
+///     Last 4 attributes are necessary because window can be resized during execution.
 pub struct UI {
     grid: Grid,
     paused: bool,
