@@ -156,7 +156,7 @@ impl UI {
             self.scr_w * 0.25,
             self.scr_h * 0.75,
             self.scr_h * 0.034,
-            Some(self.scr_h / 800.),
+            Some(1.),
             WHITE,
         );
     }

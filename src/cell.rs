@@ -3,8 +3,9 @@ use std::ops::Not;
 /// Implements "Not" trait
 /// ## Example
 /// ```
+/// use conways::cell::Cell;
 /// let alive_cell = !Cell::Dead;
-/// return alive_cell == Cell::Alive;
+/// assert_eq!(alive_cell == Cell::Alive, true);
 /// ```
 /// `returns true`
 #[derive(Debug, Clone, Copy, PartialEq)]

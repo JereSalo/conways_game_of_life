@@ -82,7 +82,8 @@ impl Grid {
     /// Calculates next generation and updates the grid state with that result.
     /// ## Example
     /// ```
-    /// let mut grid = Grid::new();
+    /// use conways::grid::Grid;
+    /// let mut grid = Grid::new(50,50);
     /// grid.update();
     /// ```
     pub fn update(&mut self) {
